@@ -1,0 +1,24 @@
+{
+  "name": "solid-robot",
+  "version": "1.0.0",
+  "description": "Backend API for communications to the Oracle Database for the Data Management Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huynhtastic/solid-robot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huynhtastic/solid-robot/issues"
+  },
+  "homepage": "https://github.com/huynhtastic/solid-robot#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  }
+}
