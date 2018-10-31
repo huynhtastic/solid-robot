@@ -18,6 +18,7 @@ async function simpleExecute(statement, binds = [], opts = {}) {
 
     try {
       conn = await oracledb.getConnection();
+      console.log(statement);
       const result = await conn.execute(statement, binds, opts);
 
       resolve(result);
