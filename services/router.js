@@ -3,6 +3,7 @@ const router = new express.Router();
 const employees = require('../controllers/employees.js');
 const login = require('../controllers/login.js');
 const register = require('../controllers/register.js');
+const balances = require('../controllers/balances.js');
 
 router.route('/employees/:id?')
   .get(employees.get)
@@ -15,5 +16,8 @@ router.route('/login')
 
 router.route('/register')
   .post(register.post);
+
+router.route('/balances/:emp_id?')
+  .get(balances.get);
 
 module.exports = router;
