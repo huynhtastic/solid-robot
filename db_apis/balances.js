@@ -2,7 +2,7 @@ const oracledb = require('oracledb');
 const database = require('../services/database.js');
 
 const getTxnQuery =
-  `SELECT points_received, points_givable
+  `SELECT points_received, points_giveable
    FROM Employees
    WHERE emp_id = :emp_id
   `;

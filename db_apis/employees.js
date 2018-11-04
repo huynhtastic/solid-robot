@@ -2,13 +2,20 @@ const oracledb = require('oracledb');
 const database = require('../services/database.js');
 
 const baseQuery = 
-  `SELECT emp_id "emp_id",
-    username "username",
-    first_name "first_name",
-    last_name "last_name",
-    email "email",
-    manager_id "manager_id"
-  from Employees`;
+  `SELECT username, first_name, last_name
+   FROM Employees
+   WHERE emp_id != :emp_id AND admin = 0`;
+
+async function findGiveables(context) {
+  let query = baseQuery;
+  const binds = context;
+
+  const result = await database.simpleExecute(query, binds);
+
+  return result.rows;
+}
+
+module.exports.findGiveables = findGiveables;
 
 async function find(context) {
   let query = baseQuery;
