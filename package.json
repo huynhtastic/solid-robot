@@ -18,7 +18,10 @@
   },
   "homepage": "https://github.com/huynhtastic/solid-robot#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "morgan": "^1.9.1",
     "oracledb": "^3.0.0"
   }

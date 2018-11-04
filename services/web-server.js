@@ -1,6 +1,9 @@
 const http = require('http');
 const express = require('express');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const cors = require('cors');
 const webServerConfig = require('../config/web-server.js');
 const router = require('./router.js');
 const database = require('./database.js');
@@ -20,14 +23,43 @@ function initialize() {
 			reviver: reviveJson
 		}));
 
+    app.use(cors());
+
     app.use('/api', router);
-    //    app.get('/', async (req, res) => {
-    //      const result = await database.simpleExecute('select user, systimestamp from dual');
-    //      const user = result.rows[0].USER
-    //      const date = result.rows[0].SYSTIMESTAMP;
-    //
-    //      res.end(`DB user: ${user}\nDate: ${date}`);
-    //    });
+
+    /* [BEGIN] user-session tracking */
+    // access cookies stored in browser
+    app.use(cookieParser());
+
+    // track logged-in user across sessions
+    app.use(session({
+      key: 'emp_id',
+      secret: 'secret',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        expires: 6000
+      }
+    }));
+
+    // check if user's cookie is saved in browser w/o user set: log them out
+    // happens when you stop express after login and cookie is still saved
+    app.use((req, res, next) => {
+      if (req.cookies.emp_id && !req.session.user) {
+        res.clearCookie('emp_id');
+      }
+      next();
+    });
+
+    var sessionChecker = (req, res, next) => {
+      if (req.session.user && req.cookies.emp_id) {
+        res.redirect('/dashboard');
+      } else {
+        next();
+      }
+    };
+
+    /* [END] user-session tracking */
 
     httpServer.listen(webServerConfig.port)
       .on('listening', () => {
