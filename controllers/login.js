@@ -10,6 +10,9 @@ async function post(req, res, next) {
     };
 
     const rows = await login.attemptLogin(context);
+
+    console.log(hashedPass);
+    console.log(rows);
     
     if (req.body.username) {
       if (rows.length === 1) {
