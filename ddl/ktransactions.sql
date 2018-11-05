@@ -41,3 +41,31 @@ BEGIN
   INTO :new.txn_id
   FROM dual;
 END;
+
+CREATE OR REPLACE PROCEDURE giveKudos
+( p_sender_id IN ktransactions.sender_id%type,
+  p_recipient_id IN ktransactions.recipient_id%type,
+  p_amount IN ktransactions.amount%type,
+  p_txn_date IN VARCHAR
+)
+AS
+  d_sender_balance NUMBER;
+  d_recipient_balance NUMBER;
+BEGIN
+  SELECT points_giveable - p_amount INTO d_sender_balance
+  FROM Employees WHERE emp_id = p_sender_id;
+  SELECT points_received + p_amount INTO d_recipient_balance
+  FROM Employees WHERE emp_id = p_recipient_id;
+
+  INSERT INTO ktransactions (sender_id, recipient_id, amount, txn_date)
+  VALUES (p_sender_id, p_recipient_id, p_amount, TO_DATE(p_txn_date, 'YYYY-MM-DD HH24:MI:SS'));
+  commit;
+
+  UPDATE Employees
+  SET points_giveable = d_sender_balance WHERE emp_id = p_sender_id;
+  commit;
+
+  UPDATE Employees
+  SET points_received = d_recipient_balance WHERE emp_id = p_recipient_id;
+  commit;
+END giveKudos;
