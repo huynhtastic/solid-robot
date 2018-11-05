@@ -29,7 +29,7 @@ CREATE TABLE Employees (
   email VARCHAR(20) UNIQUE NOT NULL,
   admin NUMBER(1) DEFAULT ON NULL 0,
   points_received NUMBER DEFAULT ON NULL 0,
-  points_givable NUMBER DEFAULT ON NULL 0,
+  points_giveable NUMBER DEFAULT ON NULL 0,
   CONSTRAINT pk_employees PRIMARY KEY (emp_id)
 );
 
