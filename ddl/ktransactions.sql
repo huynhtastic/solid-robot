@@ -72,3 +72,11 @@ BEGIN
   SET points_received = d_recipient_balance WHERE emp_id = d_recipient_id;
   commit;
 END giveKudos;
+
+CREATE OR REPLACE PROCEDURE resetPoints
+AS
+BEGIN
+    UPDATE Employees
+    SET points_giveable = 1000;
+    commit;
+END resetPoints;
