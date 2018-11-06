@@ -18,3 +18,21 @@ async function getBalances(context) {
 }
 
 module.exports.getBalances = getBalances;
+
+const makeTxnQuery =
+  `BEGIN giveKudos(:sender_id, :recipient_username, :amount, :txn_date); END;`;
+
+const resetPointsQuery =
+  `BEGIN rlh3482.resetPoints; END;`;
+
+async function makeTransaction(context) {
+  let query = makeTxnQuery;
+  const binds = context;
+
+  const result = await database.simpleExecute(query, binds);
+
+  console.log(result);
+  return result.rows;
+}
+
+module.exports.makeTransaction = makeTransaction;

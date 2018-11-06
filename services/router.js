@@ -18,6 +18,7 @@ router.route('/register')
   .post(register.post);
 
 router.route('/balances/:emp_id?')
-  .get(balances.get);
+  .get(balances.get)
+  .post(balances.post);
 
 module.exports = router;
