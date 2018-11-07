@@ -8,7 +8,7 @@ CREATE SEQUENCE txn_id_seq
 CREATE TABLE KTransactions (
   txn_id NUMBER NOT NULL,
   sender_id NUMBER NOT NULL,
-  recipient_id NUMBER NOT NULL,
+  recipient_id NUMBER,
   amount NUMBER NOT NULL,
   txn_date DATE NOT NULL,
   message VARCHAR(140),
@@ -31,6 +31,7 @@ CREATE TABLE Employees (
   admin NUMBER(1) DEFAULT ON NULL 0,
   points_received NUMBER DEFAULT ON NULL 0,
   points_giveable NUMBER DEFAULT ON NULL 0,
+  gift_cards NUMBER DEFAULT ON NULL 0,
   CONSTRAINT pk_employees PRIMARY KEY (emp_id)
 );
 
@@ -95,6 +96,25 @@ BEGIN
     WHERE admin=0;
     commit;
 END resetPoints;
+
+CREATE OR REPLACE PROCEDURE redeemGiftCard
+( p_emp_id IN employees.emp_id%type )
+AS
+    d_balance NUMBER;
+    d_gift_cards NUMBER;
+BEGIN
+    SELECT points_received, gift_cards INTO d_balance, d_gift_cards
+    FROM Employees WHERE emp_id = p_emp_id;
+
+    INSERT INTO ktransactions (sender_id, amount, txn_date, message)
+    VALUES (p_emp_id, 10000, SYSDATE, 'GIFT CARD REDEMPTION');
+    COMMIT;
+
+    UPDATE Employees
+    SET points_received = (d_balance - 10000), gift_cards = (d_gift_cards + 1)
+    WHERE emp_id = p_emp_id;
+    COMMIT;
+END redeemGiftCard;
 
 --Didn't work; insufficient privileges
 BEGIN
