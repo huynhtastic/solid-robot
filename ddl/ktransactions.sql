@@ -80,3 +80,26 @@ BEGIN
     SET points_giveable = 1000;
     commit;
 END resetPoints;
+
+--Didn't work; insufficient privileges
+BEGIN
+    DBMS_SCHEDULER.CREATE_JOB (
+        job_name => 'resetPoints',
+        job_type => 'PLSQL_BLOCK',
+        job_action => 'BEGIN resetPoints; END;',
+        start_date => timestamp '2018-11-07 17:58:00',
+        repeat_interval => 'FREQ=MINUTELY;INTERVAL=1;',
+        enabled => TRUE);
+END;
+--Didn't work; insufficient privileges
+
+DECLARE
+X NUMBER;
+BEGIN
+    DBMS_JOB.SUBMIT (
+        job => X,
+        WHAT => 'BEGIN resetPoints; END;',
+        next_date => SYSDATE + ((1/24) / 60),
+        interval => 'SYSDATE + ((1/24) / 60)'
+    );
+END;
