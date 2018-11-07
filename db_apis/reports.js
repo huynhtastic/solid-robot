@@ -19,10 +19,20 @@ const reportOne =
   )
   ORDER BY Year DESC, Month DESC, rank ASC
   `;
+
+const reportTwo =
+  `
+  SELECT username, points_giveable
+  FROM employees
+  WHERE points_giveable !=0
+  `;
+
 async function getReport(context) {
   let query;
   if (context.report_id === 1) {
     query = reportOne;
+  } else if (context.report_id === 2) {
+    query = reportTwo;
   }
 
   const result = await database.simpleExecute(query);
