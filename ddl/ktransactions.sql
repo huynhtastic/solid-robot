@@ -6,11 +6,12 @@ CREATE SEQUENCE txn_id_seq
 ;
 
 CREATE TABLE KTransactions (
-  txn_id NUMBER,
-  sender_id NUMBER,
-  recipient_id NUMBER,
-  amount NUMBER,
-  txn_date DATE,
+  txn_id NUMBER NOT NULL,
+  sender_id NUMBER NOT NULL,
+  recipient_id NUMBER NOT NULL,
+  amount NUMBER NOT NULL,
+  txn_date DATE NOT NULL,
+  message VARCHAR(140),
   CONSTRAINT pk_ktransaction PRIMARY KEY (txn_id),
   CONSTRAINT fk_sender
     FOREIGN KEY (sender_id)
@@ -55,7 +56,8 @@ CREATE OR REPLACE PROCEDURE giveKudos
 ( p_sender_id IN ktransactions.sender_id%type,
   p_recipient_username IN employees.username%type,
   p_amount IN ktransactions.amount%type,
-  p_txn_date IN VARCHAR
+  p_txn_date IN VARCHAR,
+  p_message IN ktransactions.message%type
 )
 AS
   d_recipient_id NUMBER;
@@ -69,8 +71,8 @@ BEGIN
   SELECT points_received + p_amount INTO d_recipient_balance
   FROM Employees WHERE emp_id = d_recipient_id;
 
-  INSERT INTO ktransactions (sender_id, recipient_id, amount, txn_date)
-  VALUES (p_sender_id, d_recipient_id, p_amount, TO_DATE(p_txn_date, 'YYYY-MM-DD HH24:MI:SS'));
+  INSERT INTO ktransactions (sender_id, recipient_id, amount, txn_date, message)
+  VALUES (p_sender_id, d_recipient_id, p_amount, TO_DATE(p_txn_date, 'YYYY-MM-DD HH24:MI:SS'), p_message);
   commit;
 
   UPDATE Employees
@@ -113,6 +115,6 @@ BEGIN
         job => X,
         WHAT => 'BEGIN resetPoints; END;',
         next_date => SYSDATE + ((1/24) / 60),
-        interval => 'SYSDATE + ((1/24) / 60)'
+        interval => 'SYSDATE + ((1/24) / 12)'
     );
 END;

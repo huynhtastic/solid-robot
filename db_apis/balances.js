@@ -20,7 +20,7 @@ async function getBalances(context) {
 module.exports.getBalances = getBalances;
 
 const makeTxnQuery =
-  `BEGIN giveKudos(:sender_id, :recipient_username, :amount, :txn_date); END;`;
+  `BEGIN giveKudos(:sender_id, :recipient_username, :amount, :txn_date, :message); END;`;
 
 const resetPointsQuery =
   `BEGIN rlh3482.resetPoints; END;`;
@@ -28,6 +28,8 @@ const resetPointsQuery =
 async function makeTransaction(context) {
   let query = makeTxnQuery;
   const binds = context;
+
+  console.log(binds);
 
   const result = await database.simpleExecute(query, binds);
 
