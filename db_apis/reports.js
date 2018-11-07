@@ -27,12 +27,23 @@ const reportTwo =
   WHERE points_giveable !=0
   `;
 
+const reportThree =
+  `
+  SELECT EXTRACT(MONTH FROM txn_date) Month, username, COUNT(txn_id) Redemption_Count
+  FROM ktransactions k, employees e
+  WHERE k.sender_id = e.emp_id AND recipient_id IS NULL
+  AND EXTRACT(MONTH FROM txn_date) IN (EXTRACT(MONTH FROM SYSDATE), EXTRACT(MONTH FROM ADD_MONTHS(SYSDATE, -1)), EXTRACT(MONTH FROM ADD_MONTHS(SYSDATE, -2)))
+  GROUP BY EXTRACT(MONTH FROM txn_date), username
+  `;
+
 async function getReport(context) {
   let query;
   if (context.report_id === 1) {
     query = reportOne;
   } else if (context.report_id === 2) {
     query = reportTwo;
+  } else if (context.report_id === 3) {
+    query = reportThree;
   }
 
   const result = await database.simpleExecute(query);
