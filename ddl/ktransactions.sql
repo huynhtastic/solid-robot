@@ -153,6 +153,7 @@ WHERE k.sender_id = e.emp_id
 ON a.recipient_id = e.emp_id
 ORDER BY txn_date ASC;
 
+-- Report 1
 SELECT Year, Month, username, gift, redeem,
   RANK() OVER (PARTITION BY Year, Month ORDER BY gift DESC) AS rank
 FROM (
@@ -168,3 +169,8 @@ FROM (
   )
 )
 ORDER BY Year DESC, Month DESC, rank ASC;
+
+-- Report 2
+SELECT username, points_giveable
+FROM employees
+WHERE points_giveable !=0;
