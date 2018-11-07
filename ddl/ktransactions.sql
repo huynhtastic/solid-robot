@@ -85,8 +85,12 @@ END giveKudos;
 CREATE OR REPLACE PROCEDURE resetPoints
 AS
 BEGIN
+    INSERT INTO leftoverpoints (emp_id, leftover_points, leftover_date)
+    SELECT emp_id, points_giveable, sysdate FROM employees WHERE admin=0;
+    commit;
     UPDATE Employees
-    SET points_giveable = 1000;
+    SET points_giveable = 1000
+    WHERE admin=0;
     commit;
 END resetPoints;
 
