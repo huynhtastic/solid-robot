@@ -1,10 +1,12 @@
 const express = require('express');
-const router = new express.Router();
+const balances = require('../controllers/balances.js');
 const employees = require('../controllers/employees.js');
 const login = require('../controllers/login.js');
 const register = require('../controllers/register.js');
+const reports = require('../controllers/reports.js');
 const transactions = require('../controllers/transactions.js');
-const balances = require('../controllers/balances.js');
+
+const router = new express.Router();
 
 router.route('/employees/:id?')
   .get(employees.get)
@@ -25,5 +27,8 @@ router.route('/balances/:emp_id?')
 router.route('/transactions/:emp_id?')
   .get(transactions.get)
   .post(transactions.post);
+
+router.route('/reports/:report_id')
+  .get(reports.get);
 
 module.exports = router;
