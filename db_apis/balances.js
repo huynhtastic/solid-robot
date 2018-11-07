@@ -38,3 +38,14 @@ async function makeTransaction(context) {
 }
 
 module.exports.makeTransaction = makeTransaction;
+
+async function resetPoints() {
+  let query = resetPointsQuery;
+
+  console.log(query);
+  const result = await database.simpleExecute(query);
+
+  return result.rows;
+}
+
+module.exports.resetPoints = resetPoints;
