@@ -174,3 +174,10 @@ ORDER BY Year DESC, Month DESC, rank ASC;
 SELECT username, points_giveable
 FROM employees
 WHERE points_giveable !=0;
+
+-- Report 3
+SELECT EXTRACT(MONTH FROM txn_date) Month, username, COUNT(txn_id) Redemption_Count
+FROM ktransactions k, employees e
+WHERE k.sender_id = e.emp_id AND recipient_id IS NULL
+AND EXTRACT(MONTH FROM txn_date) IN (EXTRACT(MONTH FROM SYSDATE), EXTRACT(MONTH FROM ADD_MONTHS(SYSDATE, -1)), EXTRACT(MONTH FROM ADD_MONTHS(SYSDATE, -2)))
+GROUP BY EXTRACT(MONTH FROM txn_date), username;
