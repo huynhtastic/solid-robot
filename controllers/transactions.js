@@ -19,3 +19,17 @@ async function get(req, res, next) {
 }
 
 module.exports.get = get;
+
+async function post(req, res, next) {
+  try {
+    const context = req.body;
+
+    const rows = await transactions.makeTransaction(context);
+
+    res.status(200).json(rows);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports.post = post;

@@ -22,7 +22,8 @@ router.route('/balances/:emp_id?')
   .get(balances.get)
   .post(balances.post);
 
-router.route('/transactions/:emp_id')
-  .get(transactions.get);
+router.route('/transactions/:emp_id?')
+  .get(transactions.get)
+  .post(transactions.post);
 
 module.exports = router;

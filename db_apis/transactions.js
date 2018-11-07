@@ -19,3 +19,21 @@ async function getTransactions(context) {
 }
 
 module.exports.getTransactions = getTransactions;
+
+const redeemQuery =
+  `BEGIN redeemGiftCard(:emp_id); END;`;
+
+async function makeTransaction(context) {
+  let query = redeemQuery;
+  const binds = context;
+
+  console.log(query);
+  console.log(binds);
+
+  const result = await database.simpleExecute(query, binds);
+
+  console.log(result);
+  return result.rows;
+}
+
+module.exports.makeTransaction = makeTransaction;
